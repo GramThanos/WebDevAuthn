@@ -92,44 +92,49 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 
 			// Listen for messages from other pages
 			window.addEventListener('message', (event) => {
-				if (event.origin !== this.devDomain)
+				if (event.origin !== new URL(this.devDomain).origin)
 					return;
 				if (!event.data.hasOwnProperty('id')) {
 					return;
 				}
-				// Find instance
-				let instance = false;
-				for (var i = this.instances.length - 1; i >= 0; i--) {
-					if (this.instances[i].id == event.data.id) {
-						instance = this.instances[i];
-					}
-				}
-				if (!instance) return;
-				// Do action
-				if (instance.status == 'unassigned') {
-					instance.status = 'assigned';
-					return;
-				}
-				if (instance.status == 'assigned') {
-					instance.status = 'completed';
-					//let credential = this.unserialize(event.data.credential);
-					//credential.getClientExtensionResults = () => {return {}};
-					let obj = this.unserialize(event.data.credential);
-					obj.patch = this._patchPubCred ? true : false;
-					let credential = new (VirtualPublicKeyCredential())(obj);
-					// Print data
-					console.log('VirtualPublicKeyCredential', credential);
-					if (this._pauseWithAlert) {
-						return Popup('Click ok to continue ...', 'confirm').then(x => {
-							if (x) instance.resolve(credential);
-							else instance.reject(new Error('WebDevAuthn action canceled.'));
-						});
-					}
-					instance.resolve(credential);
-					return;
-				}
-
+				this.handleResponse(event.data);
 			}, false);
+		},
+
+		handleResponse : function(data) {
+			// Find instance
+			let instance = false;
+			for (var i = this.instances.length - 1; i >= 0; i--) {
+				if (this.instances[i].id == data.id) {
+					instance = this.instances[i];
+				}
+			}
+			if (!instance) return;
+			// Do action
+			if (instance.status == 'unassigned') {
+				instance.status = 'assigned';
+				return;
+			}
+			if (instance.status == 'assigned') {
+				instance.status = 'completed';
+				//let credential = this.unserialize(data.credential);
+				//credential.getClientExtensionResults = () => {return {}};
+				console.log(data);
+				let obj = this.unserialize(data.credential);
+				obj.patch = this._patchPubCred ? true : false;
+				let credential = new (VirtualPublicKeyCredential())(obj);
+				// Print data
+				console.log('VirtualPublicKeyCredential', credential);
+				if (this._pauseWithAlert) {
+					return Popup('Click ok to continue ...', 'confirm').then(x => {
+						if (this._debugger) debugger;
+						if (x) instance.resolve(credential);
+						else instance.reject(new Error('WebDevAuthn action canceled.'));
+					});
+				}
+				instance.resolve(credential);
+				return;
+			}
 		},
 
 		connect : function(instance, send=true) {
@@ -160,6 +165,35 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 				}
 				// If popup is pending
 				if (pending) return;
+				// Check if window closed
+				if (instance.win.closed) {
+					clearInterval(interval);
+					//instance.reject(new Error('Failed to open WebDevAuthn.'));
+					//instance.reject(new Error('Failed to communicate with WebDevAuthn. Maybe cross website communication is blocked.'));
+					let url = this.devDomain + (
+						instance.authn == 'create' ?
+							this.devCreatePath :
+							this.devGetPath
+					) + '?data=' + encodeURIComponent(window.btoa(JSON.stringify({
+						id: instance.id,
+						type: instance.type,
+						url: instance.url,
+						options: this.serialize(instance.options),
+						credential: this.serialize(instance.credential),
+						extensions: this.serialize(instance.extensions)
+					})));
+					Popup('Copy custom analyser URL and paste back response', 'prompt', url, true).then((data) => {
+						// Decode data
+						try {
+							data = JSON.parse(data);
+						} catch (e) {
+							return;
+						}
+						instance.status = 'assigned';
+						this.handleResponse(data);
+					});
+					return;
+				}
 				// Check if waited too long
 				tries++;
 				if (tries > 15 * (1000/ms) ) {
@@ -488,6 +522,25 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 					this['__proto__']['__proto__'] = window.AuthenticatorAttestationResponse.prototype;
 			}
 
+			getAuthenticatorData () {
+				// ToDo https://www.w3.org/TR/webauthn-2/#iface-authenticatorattestationresponse
+				return null;
+			}
+
+			getPublicKey () {
+				// ToDo https://www.w3.org/TR/webauthn-2/#iface-authenticatorattestationresponse
+				return null; 
+			}
+
+			getPublicKeyAlgorithm () {
+				// ToDo https://www.w3.org/TR/webauthn-2/#iface-authenticatorattestationresponse
+				return null;
+			}
+
+			getTransports() {
+				return [];
+			}
+
 			// Expose that this is virtual
 			isVirtual() {
 				return true;
@@ -617,13 +670,13 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 		});
 	};
 	// Handle Popups with fallback to fake popup
-	let Popup = function(text, type='alert', defaultText) {
+	let Popup = function(text, type='alert', defaultText, force = false) {
 		let popup = type == 'confirm' ? window.confirm : type == 'prompt' ? window.prompt : window.alert;
 		return new Promise((resolve, reject) => {
 			try {
 				let t = new Date();
-				let v = popup('WebDevAuthn:\n' + text);
-				if ((new Date() - t) < 100) {
+				let v = force ? false : defaultText === undefined ? popup('WebDevAuthn:\n' + text) : popup('WebDevAuthn:\n' + text, defaultText);
+				if ((new Date() - t) < 100 || force) {
 					v = PopupFallback(text, type, defaultText);
 				}
 				resolve(v);
