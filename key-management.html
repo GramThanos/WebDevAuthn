@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>WebDevAuthn</title>
+		<meta name="description" content="Testing WebAuthn/FIDO2 Javascript API requests and responses">
+		<meta name="author" content="UNIPI - FIDO Project 2021">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<link rel="stylesheet" href="css/fontawesome-all.min.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jsNotify.bootstrap.css">
+		<link rel="stylesheet" href="css/webapp.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<div class="container">
+				<a class="navbar-brand" href="index.html"><i class="fas fa-hashtag"></i> WebDevAuthn</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a>
+						</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="key-management.html"><i class="fas fa-key"></i> Key Management <span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="credential-creation.html"><i class="fas fa-angle-double-up"></i> Credential Creation</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="credential-get.html"><i class="fas fa-angle-double-down"></i> Credential Get</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="web-injector.html"><i class="fas fa-code"></i> Web Injector</a>
+						</li>
+					</ul>
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="about.html"><i class="fas fa-info-circle"></i> About</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Page Title -->
+		<div class="main-page-title">
+			<div class="container">
+				<i class="fas fa-key"></i> Key Management
+			</div>
+		</div>
+
+		<!-- Content -->
+		<div class="main-container">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<p>
+							Manage the generated keys stored on this browser.
+						</p>
+					</div>
+				</div>
+
+				<!-- Stored Keys -->
+				<div class="row">
+					<div class="col-12">
+						<ul class="nav nav-tabs">
+							<li class="nav-item">
+								<a class="nav-link active" data-toggle="tab" href="#key-management-local-credential-ids-wrapper"><i class="fas fa-fingerprint"></i> Local Credential IDs</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#key-management-local-authenticator-wrapper"><i class="fas fa-microchip"></i> Local Virtual Authenticator Keys</a>
+							</li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane fade active show" id="key-management-local-credential-ids-wrapper">
+
+								<p>This is a list of Credentials IDs representing the information needed to request a credentials get for already created credentials. This information is stored by the server along with the public key information.</p>
+
+								<!-- Local Public Keys -->
+								<button id="localstorage-keys-reload" class="btn btn-sm btn-secondary" style="float: right;"><i class="fas fa-sync"></i> Reload</button>
+								<select id="localstorage-keys-hosts-list" class="form-control" style="float: right;width: 200px;margin-right: 10px;margin-top: -2px;"></select>
+
+								<p>Credential IDs stored on LocalStorage:</p>
+								<div class="table-responsive">
+									<table class="table">
+										<tbody id="localstorage-keys">
+											<tr>
+												<td colspan="3">Loading ...</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+							<div class="tab-pane fade" id="key-management-local-authenticator-wrapper">
+
+								<p>This is a list of resident keys created by our virtual authenticator. This information is needed by the virtual authenticator in order to recover the private key of each credential.</p>
+								
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#masterPasswordModal" style="float: right;margin-bottom: 8px;"><i class="fas fa-key"></i> Configure Master Password</button>
+								<div style="clear: both;"></div>
+
+								<!-- Local Authenticator Keys -->
+								<button id="localstorage-authenticator-keys-reload" class="btn btn-sm btn-secondary" style="float: right;"><i class="fas fa-sync"></i> Reload</button>
+								<select id="localstorage-authenticator-keys-hosts-list" class="form-control" style="float: right;width: 200px;margin-right: 10px;margin-top: -2px;"></select>
+
+								<p>Virtual Authenticator's Credential Information stored on LocalStorage:</p>
+								<div class="table-responsive">
+									<table class="table">
+										<tbody id="localstorage-authenticator-keys">
+											<tr>
+												<td colspan="3">Loading ...</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Browser Support { -->
+				<div class="row">
+					<div class="col-12" id="webauthn-support">
+						<div class="alert alert-warning" role="alert">
+							Checking browser's WebAuthn support ...
+						</div>
+					</div>
+					<script src="js/webauthn-support.js"></script>
+				</div>
+				<!-- } Browser Support -->
+			</div>
+		</div>
+		<div class="container footer">
+			<div class="row">
+				<div class="col-12">
+					<div>Copyright &copy; 2021, <a href="https://github.com/GramThanos">Athanasios Vasileios Grammatopoulos</a></div>
+					<div>In collaboration with <a href="https://ssl.ds.unipi.gr/">Systems Security Laboratory</a>, Department of Digital Systems, <a href="https://www.unipi.gr/">University of Piraeus</a></div>
+				</div>
+				<div class="col-12">
+					<div style="height:300px;"></div>
+					<div style="text-align: right;font-family: Consolas;">&lt;-- this is the end --&gt;</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="masterPasswordModal" tabindex="-1" aria-labelledby="masterPasswordModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="masterPasswordModalLabel">Configure Master Password</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="localstorage-authenticator-masterkey">Master Key</label>
+								<div class="input-group mb-2 mr-sm-2">
+									<input type="password" id="localstorage-authenticator-masterkey" class="form-control" placeholder="Master Key" value=""/>
+									<div class="input-group-append">
+										<div class="input-group-text" style="width: 42px;">
+											<i class="fas fa-eye-slash" id="localstorage-authenticator-masterkey-visible" style="cursor: pointer;"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group form-check">
+								<input type="checkbox" class="form-check-input" id="localstorage-authenticator-always-ask-for-masterkey">
+								<label class="form-check-label" for="localstorage-authenticator-always-ask-for-masterkey">Always ask Master Key</label>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="decryptWrappedKey" tabindex="-1" aria-labelledby="decryptWrappedKeyLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="decryptWrappedKeyLabel">Decrypt Wrapped Key</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<ul class="nav nav-tabs" id="decryptWrappedKeyView" role="tablist">
+							<li class="nav-item">
+								<a class="nav-link active" id="decryptWrappedKeyView-raw-tab" data-toggle="tab" href="#decryptWrappedKeyView-raw" role="tab" aria-controls="decryptWrappedKeyView-raw" aria-selected="true">Raw</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" id="decryptWrappedKeyView-decoded-tab" data-toggle="tab" href="#decryptWrappedKeyView-decoded" role="tab" aria-controls="decryptWrappedKeyView-decoded" aria-selected="false">Decoded</a>
+							</li>
+						</ul>
+						<div class="tab-content" id="myTabContent">
+							<div class="tab-pane fade show active" id="decryptWrappedKeyView-raw" role="tabpanel" aria-labelledby="decryptWrappedKeyView-raw-tab"><pre></pre></div>
+							<div class="tab-pane fade" id="decryptWrappedKeyView-decoded" role="tabpanel" aria-labelledby="decryptWrappedKeyView-decoded-tab"><pre></pre></div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="js/jquery-3.5.1.slim.min.js"></script>
+		<script src="js/popper.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/jsNotify.bundle.js"></script>
+		<script src="js/cbor.js"></script>
+		<script src="js/ua-parser.min.js"></script>
+		<script src="js/webauthn-tools.js"></script>
+		<script src="js/webauthn-authenticator.js"></script>
+		<script src="js/credentials-storage.js"></script>
+		<script src="js/webauthn-keys.js"></script>
+	</body>
+</html>

@@ -1,0 +1,33 @@
+{
+	"manifest_version": 3,
+	"name": "WebDevAuthn",
+	"description": "Debug FIDO2 requests and responses",
+	"version": "0.1",
+	"content_scripts": [
+		{
+			"matches": ["http://*/*", "https://*/*"],
+			"js": ["inject.js"],
+			"run_at": "document_start",
+			"all_frames": true
+		}
+	],
+	"action": {
+		"default_popup": "popup.html"
+	},
+	"icons": {
+		"19": "icons/icon.png",
+		"48": "icons/icon_48.png",
+		"128": "icons/icon_128.png"
+	},
+	"host_permissions" : [
+		"<all_urls>"
+	],
+	"permissions": [
+		"storage"
+	],
+	"web_accessible_resources": [{
+		"resources" : ["webauthn-dev.js"],
+		"matches": ["https://*/*"],
+		"extension_ids": []
+	}]
+}

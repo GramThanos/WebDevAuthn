@@ -1,0 +1,20 @@
+/*
+ * jsNotify v1.1.0
+ * Bootstrap Theme
+ */
+
+.jsNotify-section {
+	bottom: 5px;
+	position: fixed;
+	right: 5px;
+}
+.jsNotify {
+	float: right;
+	margin-bottom: 5px;
+}
+.jsNotify-clear {
+	clear: both;
+}
+.jsNotify.alert-light {
+	border: 1px solid #ccc;
+}

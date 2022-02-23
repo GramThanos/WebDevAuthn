@@ -1,0 +1,83 @@
+
+html, body {
+	background-color: #eeeeee;
+}
+
+.main-page-title {
+	padding: 25px 0px;
+	background-color: #eeeeee;
+	font-size: 1.2em;
+	text-transform: uppercase;
+	border-bottom: 1px solid #b7b7b7;
+}
+
+.main-page-title i.fas {
+	font-size: 0.8em;
+}
+
+.main-container {
+	padding-top: 1em;
+	background-color: #ffffff;
+}
+
+.main-container .card {
+	margin-bottom: 25px;
+}
+
+.main-container .notes {
+	float: right;
+	font-size: 0.9em;
+}
+
+.footer {
+	font-size: 0.8em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.tooltip {
+	text-transform: none;
+}
+.tooltip .tooltip-inner {
+	text-align: justify;
+	line-height: 1.2em;
+}
+
+.alert-secondary, .alert-secondary>td, .alert-secondary>th {
+	background-color: #e6e6e4;
+}
+
+.tab-content {
+	border: 1px solid #dfd7ca;
+	padding: 10px 10px 0px 10px;
+	margin-top: -1px;
+	margin-bottom: 20px;
+}
+
+.btn.btn-sm-h {
+	line-height: 14px;
+}
+
+.tab-pane > .alert > div {
+}
+
+.badges-code-wrap {
+	font-family: Consolas;
+	/*
+	white-space: break-spaces;
+	text-align: left;
+	*/
+}
+
+.form-group.sub-group {
+	background-color: #f1f1f1;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.form-group.sub-group .btn-outline-danger {
+	float: right;
+	height: 24px;
+	line-height: 24px;
+	padding-top: 0;
+}

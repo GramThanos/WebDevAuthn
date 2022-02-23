@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>WebDevAuthn</title>
+		<meta name="description" content="Testing WebAuthn/FIDO2 Javascript API requests and responses">
+		<meta name="author" content="UNIPI - FIDO Project 2021">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<link rel="stylesheet" href="css/fontawesome-all.min.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jsNotify.bootstrap.css">
+		<link rel="stylesheet" href="css/prism.css">
+		<link rel="stylesheet" href="css/webapp.css">
+	</head>
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<div class="container">
+				<a class="navbar-brand" href="index.html"><i class="fas fa-hashtag"></i> WebDevAuthn</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="key-management.html"><i class="fas fa-key"></i> Key Management</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="credential-creation.html"><i class="fas fa-angle-double-up"></i> Credential Creation</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="credential-get.html"><i class="fas fa-angle-double-down"></i> Credential Get</a>
+						</li>
+						<li class="nav-item active">
+							<a class="nav-link" href="web-injector.html"><i class="fas fa-code"></i> Web Injector <span class="sr-only">(current)</span></a>
+						</li>
+					</ul>
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="about.html"><i class="fas fa-info-circle"></i> About</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Page Title -->
+		<div class="main-page-title">
+			<div class="container">
+				<i class="fas fa-code"></i> Web Injector
+			</div>
+		</div>
+
+		<!-- Content -->
+		<div class="main-container">
+			<div class="container">
+				<div class="row" style="margin-bottom: 25px;">
+					<div class="col-12">
+						<p>
+							Inject WebDevAuthn into your web application to:
+							<ul>
+								<li>hijack and analyse WebAuthn Requests and Response</li>
+								<li>use the Virtual Authenticator</li>
+								<li>validate your implementation's WebAuthn parameters</li>
+								<li>PenTest your FIDO2/WebAuthn implementation</li>
+							</ul>
+						</p>
+					</div>
+					<div class="col-12">
+						<h2>Dev Tools Injection</h2>
+						Inject the hijacker by pasting this code into the Dev Tool of your broser on the webpage that features WebAuthn.
+						<pre data-src="js/webauthn-dev.js" style="height: 250px;"></pre>
+					</div>
+					<div class="col-12">
+						<h2>Load as script</h2>
+						Add the hijacker script into the developement instance of your website.
+						<pre><code class="lang-html">&lt;script src="https://gramthanos.github.io/WebDevAuthn/js/webauthn-dev.js"
+		data-development="true"
+		data-virtual="true"
+		data-pause-with-alert="false"
+		data-instance-of-pub-key="true"
+		data-debugger="true"/&gt;&lt;/script&gt;</code></pre>
+					</div>
+					<div class="col-12">
+						<h2>Install Browser Extension</h2>
+						Load the WebDevAuthn extension (as an unpacked extension) on your browser.<br>
+						<a href="webdevauthn-extension.zip">Download webdevauthn-extension.zip</a>
+					</div>
+				</div>
+
+				<!-- Browser Support { -->
+				<div class="row">
+					<div class="col-12" id="webauthn-support">
+						<div class="alert alert-warning" role="alert">
+							Checking browser's WebAuthn support ...
+						</div>
+					</div>
+					<script src="js/webauthn-support.js"></script>
+				</div>
+				<!-- } Browser Support -->
+			</div>
+		</div>
+		<div class="container footer">
+			<div class="row">
+				<div class="col-12">
+					<div>Copyright &copy; 2021, <a href="https://github.com/GramThanos">Athanasios Vasileios Grammatopoulos</a></div>
+					<div>In collaboration with <a href="https://ssl.ds.unipi.gr/">Systems Security Laboratory</a>, Department of Digital Systems, <a href="https://www.unipi.gr/">University of Piraeus</a></div>
+				</div>
+				<div class="col-12">
+					<div style="height:300px;"></div>
+					<div style="text-align: right;font-family: Consolas;">&lt;-- this is the end --&gt;</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="js/jquery-3.5.1.slim.min.js"></script>
+		<script src="js/popper.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/prism.js"></script>
+	</body>
+</html>
