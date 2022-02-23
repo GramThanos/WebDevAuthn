@@ -539,7 +539,7 @@ window.authnGet = {
 		for (let item in this.credential.response) {
 			try {
 				if (typeof this.credential.response[item] != 'function') {
-					this.credential.response[item] = this.credential.response[item];
+					$credential.response[item] = this.credential.response[item];
 				}
 			} catch (e) {
 				console.log('Failed to read item from credentials', item, this.credential.response);
