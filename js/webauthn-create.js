@@ -1476,8 +1476,12 @@ window.authnCreate = {
 		// Prepare credential object
 		var $credential = {};
 		for (let item in this.credential) {
-			if (typeof this.credential[item] != 'function') {
-				$credential[item] = this.credential[item];
+			try {
+				if (typeof this.credential[item] != 'function') {
+					$credential[item] = this.credential[item];
+				}
+			} catch (e) {
+				console.log('Failed to read item from credentials', item, this.credential);
 			}
 		}
 		$credential.response = {};
