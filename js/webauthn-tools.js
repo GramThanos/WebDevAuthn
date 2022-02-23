@@ -174,9 +174,13 @@ window.authnTools = {
 			) {
 				let o = {};
 				for (let i in value) {
-					if (typeof value[i] !== 'function') {
-						o[i] = parseObject(value[i]);
-					}
+					try {
+						if (typeof value[i] !== 'function') {
+							o[i] = parseObject(value[i]);
+						}
+					} catch (e) {
+						console.log('Failed to parse item from object', i, value);
+					};
 				}
 				return o;
 			}
