@@ -92,7 +92,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 
 			// Listen for messages from other pages
 			window.addEventListener('message', (event) => {
-				if (event.origin !== this.devDomain)
+				if (event.origin !== new URL(this.devDomain).origin)
 					return;
 				if (!event.data.hasOwnProperty('id')) {
 					return;
