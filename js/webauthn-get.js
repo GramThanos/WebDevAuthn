@@ -527,14 +527,22 @@ window.authnGet = {
 		// Prepare credential object
 		var $credential = {};
 		for (let item in this.credential) {
-			if (typeof this.credential[item] != 'function') {
-				$credential[item] = this.credential[item];
+			try {
+				if (typeof this.credential[item] != 'function') {
+					$credential[item] = this.credential[item];
+				}
+			} catch (e) {
+				console.log('Failed to read item from credentials', item, this.credential);
 			}
 		}
 		$credential.response = {};
 		for (let item in this.credential.response) {
-			if (typeof this.credential.response[item] != 'function') {
-				$credential.response[item] = this.credential.response[item];
+			try {
+				if (typeof this.credential.response[item] != 'function') {
+					this.credential.response[item] = this.credential.response[item];
+				}
+			} catch (e) {
+				console.log('Failed to read item from credentials', item, this.credential.response);
 			}
 		}
 		
