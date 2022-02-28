@@ -48,6 +48,7 @@ window.AuthnDevice = (function (localURL) {
 			freezeSigCounter : false,
 			freezeUserVerificationFlag : false,
 			relayPartyID : false,
+			origin : false,
 			userHandle : false,
 			algorithm : false,
 			forceResidentKey : false,
