@@ -1693,12 +1693,29 @@ window.authnCreate.initIanaAlgorithms();
 	document.getElementById('virtual-testing-checkbox').addEventListener('change', function() {
 		document.getElementById('virtual-testing-options').style.display = this.checked ? 'block' : 'none';
 	});
+
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+	})('challenge');
+
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+	})('userId');
 	
 	(function(id) {
 		let toggle = document.getElementById('testing-' + id + '-checkbox');
 		let input = document.getElementById('testing-' + id + '-value');
 		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? (input.value === 'true' ? 1 : 0) : false);});
 		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, (input.value === 'true' ? 1 : 0));});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, (input.value === 'true' ? 1 : 0));});
 	})('freezeUserVerificationFlag');
 	
 	(function(id) {
@@ -1706,6 +1723,7 @@ window.authnCreate.initIanaAlgorithms();
 		let input = document.getElementById('testing-' + id + '-value');
 		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
 		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
 	})('relayPartyID');
 	
 	(function(id) {
@@ -1713,6 +1731,7 @@ window.authnCreate.initIanaAlgorithms();
 		let input = document.getElementById('testing-' + id + '-value');
 		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
 		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
 	})('origin');
 
 	(function(id) {
@@ -1720,6 +1739,7 @@ window.authnCreate.initIanaAlgorithms();
 		let input = document.getElementById('testing-' + id + '-value');
 		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? parseInt(input.value, 10) : false);});
 		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, parseInt(input.value, 10));});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, parseInt(input.value, 10));});
 	})('algorithm');
 
 	(function(id) {
@@ -1727,6 +1747,7 @@ window.authnCreate.initIanaAlgorithms();
 		let input = document.getElementById('testing-' + id + '-value');
 		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
 		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
 	})('aaguid');
 
 	(function(id) {

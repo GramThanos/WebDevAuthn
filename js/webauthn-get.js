@@ -704,41 +704,53 @@ window.authnGet.initCredentials();
 		document.getElementById('virtual-testing-options').style.display = this.checked ? 'block' : 'none';
 	});
 
-	document.getElementById('testing-freezeSigCounter-checkbox').addEventListener('change', function() {
-		window.VirtualAuthn.doTesting('freezeSigCounter',
-			this.checked ?
-				parseInt(document.getElementById('testing-freezeSigCounter-value').value, 10) :
-				false
-		);
-	});
-	document.getElementById('testing-freezeUserVerificationFlag-checkbox').addEventListener('change', function() {
-		window.VirtualAuthn.doTesting('freezeUserVerificationFlag',
-			this.checked ?
-				(document.getElementById('testing-freezeUserVerificationFlag-value').value === 'true' ? 1 : 0) :
-				false
-		);
-	});
-	document.getElementById('testing-relayPartyID-checkbox').addEventListener('change', function() {
-		window.VirtualAuthn.doTesting('relayPartyID',
-			this.checked ?
-				document.getElementById('testing-relayPartyID-value').value :
-				false
-		);
-	});
-	document.getElementById('testing-origin-checkbox').addEventListener('change', function() {
-		window.VirtualAuthn.doTesting('origin',
-			this.checked ?
-				document.getElementById('testing-origin-value').value :
-				false
-		);
-	});
-	document.getElementById('testing-userHandle-checkbox').addEventListener('change', function() {
-		window.VirtualAuthn.doTesting('userHandle',
-			this.checked ?
-				document.getElementById('testing-userHandle-value').value :
-				false
-		);
-	});
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+	})('challenge');
+
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? parseInt(input.value, 10) : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, parseInt(input.value, 10));});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, parseInt(input.value, 10));});
+	})('freezeSigCounter');
+
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? (input.value === 'true' ? 1 : 0) : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, (input.value === 'true' ? 1 : 0));});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, (input.value === 'true' ? 1 : 0));});
+	})('freezeUserVerificationFlag');
+
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+	})('relayPartyID');
+
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+	})('origin');
+
+	(function(id) {
+		let toggle = document.getElementById('testing-' + id + '-checkbox');
+		let input = document.getElementById('testing-' + id + '-value');
+		toggle.addEventListener('change', function() {window.VirtualAuthn.doTesting(id, toggle.checked ? input.value : false);});
+		input.addEventListener('change', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+		input.addEventListener('keyup', function() {if (toggle.checked) window.VirtualAuthn.doTesting(id, input.value);});
+	})('userHandle');
 })();
 
 // Handle errors

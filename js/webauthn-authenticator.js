@@ -45,6 +45,8 @@ window.AuthnDevice = (function (localURL) {
 
 		// Testing parameters
 		this.testing = {
+			challenge : false,
+			userId : false,
 			freezeSigCounter : false,
 			freezeUserVerificationFlag : false,
 			relayPartyID : false,
@@ -67,6 +69,7 @@ window.AuthnDevice = (function (localURL) {
 	};
 
 	// Set testing parameter
+	// e.g. authenticator.doTesting('challenge', window.btoa('fake-challenge')); // User Handle (in base64)
 	// e.g. authenticator.doTesting('freezeSigCounter', 1); // Freeze authenticator signing counter to 1
 	// e.g. authenticator.doTesting('freezeUserVerificationFlag', 1); // Set UV value to 1
 	// e.g. authenticator.doTesting('relayPartyID', 'example.com'); // Relay Party ID
@@ -461,6 +464,16 @@ window.AuthnDevice = (function (localURL) {
 		if (this.testing.relayPartyID) {
 			rpid = new URL('https://' + this.testing.relayPartyID).hostname;
 		}
+
+		let userId = options.publicKey.user.id;
+		if (this.testing.userId) {
+			if (this.testing.userId instanceof ArrayBuffer) {
+				userId = this.testing.userId;
+			}
+			else if (typeof this.testing.userId === 'string') {
+				userId = window.authnTools.base64urlToUint8Array(this.testing.userId);
+			}
+		}
 		
 		// Prepare new key
 		await this._cred_init(rpid, options.publicKey.user.id, null, keyPairAlg);
@@ -470,15 +483,25 @@ window.AuthnDevice = (function (localURL) {
 		// Get credential id
 		let credential_id = new Uint8Array(this.credential_id);
 
+		let challenge = options.publicKey.challenge;
+		if (this.testing.challenge) {
+			if (this.testing.challenge instanceof ArrayBuffer) {
+				challenge = this.testing.challenge;
+			}
+			else if (typeof this.testing.challenge === 'string') {
+				challenge = window.authnTools.base64urlToUint8Array(this.testing.challenge);
+			}
+		}
+
 		// Generate response
 		let client_data = {
 			'type': 'webauthn.create',
-			'challenge': window.authnTools.uint8ArrayToBase64url(options.publicKey.challenge),
+			'challenge': window.authnTools.uint8ArrayToBase64url(challenge),
 			'origin': origin,
 			'crossOrigin': false,
 			'virtual_authenticator' : 'GramThanos & University of Piraeus'
 		}
-		console.log(client_data);
+		//console.log(client_data);
 		client_data = JSON.stringify(client_data);
 		client_data = new TextEncoder().encode(client_data);
 
@@ -659,10 +682,20 @@ window.AuthnDevice = (function (localURL) {
 			//options.publicKey.rpId = this.testing.relayPartyID;
 		}
 
+		let challenge = options.publicKey.challenge;
+		if (this.testing.challenge) {
+			if (this.testing.challenge instanceof ArrayBuffer) {
+				challenge = this.testing.challenge;
+			}
+			else if (typeof this.testing.challenge === 'string') {
+				challenge = window.authnTools.base64urlToUint8Array(this.testing.challenge);
+			}
+		}
+
 		// Generate Client Data
 		let client_data = {
 			'type': 'webauthn.get',
-			'challenge': window.authnTools.uint8ArrayToBase64url(options.publicKey.challenge),
+			'challenge': window.authnTools.uint8ArrayToBase64url(challenge),
 			'origin': origin,
 			'crossOrigin' : false,
 			'virtual_authenticator' : 'GramThanos & University of Piraeus'
