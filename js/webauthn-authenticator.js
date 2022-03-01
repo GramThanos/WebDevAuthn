@@ -476,7 +476,7 @@ window.AuthnDevice = (function (localURL) {
 		}
 		
 		// Prepare new key
-		await this._cred_init(rpid, options.publicKey.user.id, null, keyPairAlg);
+		await this._cred_init(rpid, userId, null, keyPairAlg);
 		// Save resident key
 		if (requestResidentKey) await this._saveResidentKey(rpid);
 
