@@ -686,7 +686,12 @@ window.WebDevAuthn = window.WebDevAuthn || ((cWindow, credentials, PKCredential)
 		});
 	};
 
-	WebDevAuthn.init();
+	if (!credentials || !PKCredential) {
+		console.log('WebDevAuthn: WebAuthn is not availiable in this context.');
+	}
+	else {
+		WebDevAuthn.init();
+	}
 	return WebDevAuthn;
 })(window, window.navigator.credentials, window.PublicKeyCredential);
 
