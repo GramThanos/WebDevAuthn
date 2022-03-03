@@ -514,7 +514,14 @@ window.authnCreate = {
 			else if (!isDOMString(this.options.publicKey.rp.id)) {
 				observations.push({message: '"publicKey.rp.id" does not have a DOMString type value.', type: 'danger'});
 			}
-			checkUnknownKeys('publicKey.rp', this.options.publicKey.rp, ['name', 'id']);
+			// check value
+			if (this.options.publicKey.rp.hasOwnProperty('icon')) {
+				if (!isUSVString(this.options.publicKey.rp.icon)) {
+					observations.push({message: '"publicKey.rp.icon" does not have a USVString type value.', type: 'danger'});
+				}
+				observations.push({message: '"publicKey.rp.icon" was removed from WebAuthn-2.', type: 'warning'});
+			}
+			checkUnknownKeys('publicKey.rp', this.options.publicKey.rp, ['name', 'id', 'icon']);
 		}
 
 		// required
@@ -554,7 +561,14 @@ window.authnCreate = {
 			else if (!isDOMString(this.options.publicKey.user.displayName)) {
 				observations.push({message: '"publicKey.user.displayName" does not have a DOMString type value.', type: 'danger'});
 			}
-			checkUnknownKeys('publicKey.user', this.options.publicKey.user, ['name', 'id', 'displayName']);
+			// check value
+			if (this.options.publicKey.user.hasOwnProperty('icon')) {
+				if (!isUSVString(this.options.publicKey.user.icon)) {
+					observations.push({message: '"publicKey.user.icon" does not have a USVString type value.', type: 'danger'});
+				}
+				observations.push({message: '"publicKey.user.icon" was removed from WebAuthn-2.', type: 'warning'});
+			}
+			checkUnknownKeys('publicKey.user', this.options.publicKey.user, ['name', 'id', 'displayName', 'icon']);
 		}
 
 		// required
@@ -839,7 +853,7 @@ window.authnCreate = {
 			}
 
 			if (this.options.publicKey.authenticatorSelection.hasOwnProperty('requireResidentKey')) {
-				observations.push({message: '"publicKey.authenticatorSelection.requireResidentKey" is retained for backwards compatibility with WebAuthn Level 1.', type: 'info'});
+				observations.push({message: '"publicKey.authenticatorSelection.requireResidentKey" is retained for backwards compatibility with WebAuthn-1.', type: 'info'});
 				if (!isBoolean(this.options.publicKey.authenticatorSelection.requireResidentKey)) {
 					observations.push({message: '"publicKey.authenticatorSelection.requireResidentKey" does not have a boolean type value.', type: 'danger'});
 				}
