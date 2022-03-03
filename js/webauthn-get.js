@@ -424,23 +424,113 @@ window.authnGet = {
 			observations.push({message: '"publicKey.userVerification" is adviced to be set to "required".', type: 'warning'});
 		}
 
+		// A list of the registered extentions ids can be found at IANA
+		// https://www.iana.org/assignments/webauthn/webauthn.xhtml#table-webauthn-extension-ids
 		if (this.options.publicKey.hasOwnProperty('extensions')) {
 			for (let extension in this.options.publicKey.extensions) {
 				if (this.options.publicKey.extensions.hasOwnProperty(extension)) {
 
+					// WebAuthn-2 > FIDO AppID Extension (appid)
 					if (extension === 'appid') {
 						if (!isUSVString(this.options.publicKey.extensions[extension])) {
 							observations.push({message: '"publicKey.extensions.appid" does not have a USVString type value.', type: 'danger'});
 						}
 					}
+					// WebAuthn-2 > User Verification Method Extension (uvm)
 					else if (extension === 'uvm') {
 						if (!isBoolean(this.options.publicKey.extensions[extension])) {
 							observations.push({message: '"publicKey.extensions.uvm" does not have a boolean type value.', type: 'danger'});
 						}
 					}
+					// Client to Authenticator Protocol (CTAP) > HMAC Secret Extension (hmac-secret)
+					else if (extension === 'hmacGetSecret') {
+						// required
+						if (!this.options.publicKey.extensions[extension].hasOwnProperty('salt1')) {
+							observations.push({message: '"publicKey.extensions.hmacGetSecret.salt1" was not found.', type: 'danger'});
+						}
+						else if (!this.options.publicKey.extensions[extension].salt1 instanceof ArrayBuffer) {
+							observations.push({message: '"publicKey.extensions.hmacGetSecret.salt1" does not have an ArrayBuffer type value.', type: 'danger'});
+						}
+						else if (this.options.publicKey.extensions[extension].salt1.byteLength != 32) {
+							observations.push({message: '"publicKey.extensions.hmacGetSecret.salt1" is not 32 bytes long.', type: 'danger'});
+						}
+						if (this.options.publicKey.extensions[extension].hasOwnProperty('salt2')) {
+							if (!this.options.publicKey.extensions[extension].salt2 instanceof ArrayBuffer) {
+								observations.push({message: '"publicKey.extensions.hmacGetSecret.salt2" does not have an ArrayBuffer type value.', type: 'danger'});
+							}
+							else if (this.options.publicKey.extensions[extension].salt2.byteLength != 32) {
+								observations.push({message: '"publicKey.extensions.hmacGetSecret.salt2" is not 32 bytes long.', type: 'danger'});
+							}
+						}
+						// Check for unknown keys
+						for (let key in this.options.publicKey.extensions[extension]) {
+							if (this.options.publicKey.extensions[extension].hasOwnProperty(key) && !['salt1', 'salt2'].includes(key)) {
+								observations.push({message: 'unknown attribute "publicKey.extensions.hmacGetSecret.' + key + '"', type: 'warning'});
+							}
+						}
+					}
+					// WebAuthn-2 > Large blob storage extension (largeBlob)
 					else if (extension === 'largeBlob') {
-						// ToDo
-						observations.push({message: '"largeBlob" extension ignored.', type: 'info'});
+						// Only valid during registration
+						if (this.options.publicKey.extensions[extension].hasOwnProperty('support')) {
+							if (!isDOMString(this.options.publicKey.extensions[extension].support)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.support" does not have a DOMString type value.', type: 'danger'});
+							}
+							else if (!['required', 'preferred'].includes(this.options.publicKey.extensions[extension].support)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.support" does not have a valid enum LargeBlobSupport value.', type: 'danger'});
+							}
+							observations.push({message: '"publicKey.extensions.largeBlob.support" is only valid during registration.', type: 'danger'});
+						}
+						// Only valid during authentication
+						if (this.options.publicKey.extensions[extension].hasOwnProperty('read')) {
+							if (!isDOMString(this.options.publicKey.extensions[extension].read)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.read" does not have a boolean type value.', type: 'danger'});
+							}
+						}
+						// Only valid during authentication
+						if (this.options.publicKey.extensions[extension].hasOwnProperty('write')) {
+							if (!isBufferSource(this.options.publicKey.extensions[extension].write)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.write" does not have a BufferSource type value.', type: 'danger'});
+							}
+						}
+						// Check for unknown keys
+						for (let key in this.options.publicKey.extensions[extension]) {
+							if (this.options.publicKey.extensions[extension].hasOwnProperty(key) && !['support', 'read', 'write'].includes(key)) {
+								observations.push({message: 'unknown attribute "publicKey.extensions.largeBlob.' + key + '"', type: 'warning'});
+							}
+						}
+					}
+					// WebAuthn-1 > Simple Transaction Authorization Extension (txAuthSimple)
+					if (extension === 'txAuthSimple') {
+						if (!isUSVString(this.options.publicKey.extensions[extension])) {
+							observations.push({message: '"publicKey.extensions.txAuthSimple" does not have a USVString type value.', type: 'danger'});
+						}
+						observations.push({message: '"publicKey.extensions.txAuthSimple" was removed from WebAuthn-2.', type: 'danger'});
+					}
+					// WebAuthn-1 > Generic Transaction Authorization Extension (txAuthGeneric)
+					else if (extension === 'txAuthGeneric') {
+						// required
+						if (!this.options.publicKey.extensions[extension].hasOwnProperty('contentType')) {
+							observations.push({message: '"publicKey.extensions.txAuthGeneric.contentType" was not found.', type: 'danger'});
+						}
+						else if (!isUSVString(this.options.publicKey.extensions[extension].contentType)) {
+							observations.push({message: '"publicKey.extensions.txAuthGeneric.contentType" does not have a USVString type value.', type: 'danger'});
+						}
+
+						// required
+						if (!this.options.publicKey.extensions[extension].hasOwnProperty('content')) {
+							observations.push({message: '"publicKey.extensions.txAuthGeneric.content" was not found.', type: 'danger'});
+						}
+						else if (!this.options.publicKey.extensions[extension].content instanceof ArrayBuffer) {
+							observations.push({message: '"publicKey.extensions.txAuthGeneric.content" does not have a USVString type value.', type: 'danger'});
+						}
+						// Check for unknown keys
+						for (let key in this.options.publicKey.extensions[extension]) {
+							if (this.options.publicKey.extensions[extension].hasOwnProperty(key) && !['contentType', 'content'].includes(key)) {
+								observations.push({message: 'unknown attribute "publicKey.extensions.txAuthGeneric.' + key + '"', type: 'warning'});
+							}
+						}
+						observations.push({message: '"publicKey.extensions.txAuthSimple" was removed from WebAuthn-2.', type: 'danger'});
 					}
 
 					else {

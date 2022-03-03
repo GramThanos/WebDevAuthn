@@ -553,7 +553,6 @@ window.authnCreate = {
 					//user handle be 64 random bytes
 				}
 			}
-			
 			// required
 			if (!this.options.publicKey.user.hasOwnProperty('displayName')) {
 				observations.push({message: '"publicKey.user.displayName" was not found.', type: 'danger'});
@@ -906,28 +905,79 @@ window.authnCreate = {
 			}
 		}
 
+		// A list of the registered extentions ids can be found at IANA
+		// https://www.iana.org/assignments/webauthn/webauthn.xhtml#table-webauthn-extension-ids
 		if (this.options.publicKey.hasOwnProperty('extensions')) {
 			for (let extension in this.options.publicKey.extensions) {
 				if (this.options.publicKey.extensions.hasOwnProperty(extension)) {
 
+					// WebAuthn-2 > FIDO AppID Extension (appidExclude)
 					if (extension === 'appidExclude') {
 						if (!isUSVString(this.options.publicKey.extensions[extension])) {
 							observations.push({message: '"publicKey.extensions.appidExclude" does not have a USVString type value.', type: 'danger'});
 						}
 					}
+					// WebAuthn-2 > User Verification Method Extension (uvm)
 					else if (extension === 'uvm') {
 						if (!isBoolean(this.options.publicKey.extensions[extension])) {
 							observations.push({message: '"publicKey.extensions.uvm" does not have a boolean type value.', type: 'danger'});
 						}
 					}
+					// WebAuthn-2 > Credential Properties Extension (credProps)
 					else if (extension === 'credProps') {
 						if (!isBoolean(this.options.publicKey.extensions[extension])) {
 							observations.push({message: '"publicKey.extensions.credProps" does not have a boolean type value.', type: 'danger'});
 						}
 					}
+					// Client to Authenticator Protocol (CTAP) > HMAC Secret Extension (hmac-secret)
+					else if (extension === 'hmacCreateSecret') {
+						if (!isBoolean(this.options.publicKey.extensions[extension])) {
+							observations.push({message: '"publicKey.extensions.hmacCreateSecret" does not have a boolean type value.', type: 'danger'});
+						}
+					}
+					// Client to Authenticator Protocol (CTAP) > Credential Protection (credProtect)
+					else if (extension === 'credentialProtectionPolicy') {
+						if (!isUSVString(this.options.publicKey.extensions[extension])) {
+							observations.push({message: '"publicKey.extensions.credentialProtectionPolicy" does not have a USVString type value.', type: 'danger'});
+						}
+					}
+					// Client to Authenticator Protocol (CTAP) > Credential Protection (credProtect)
+					else if (extension === 'enforceCredentialProtectionPolicy') {
+						if (!isBoolean(this.options.publicKey.extensions[extension])) {
+							observations.push({message: '"publicKey.extensions.enforceCredentialProtectionPolicy" does not have a boolean type value.', type: 'danger'});
+						}
+					}
+					// WebAuthn-2 > Large blob storage extension (largeBlob)
 					else if (extension === 'largeBlob') {
-						// ToDo
-						observations.push({message: '"largeBlob" extension ignored.', type: 'info'});
+						// Only valid during registration
+						if (this.options.publicKey.extensions[extension].hasOwnProperty('support')) {
+							if (!isDOMString(this.options.publicKey.extensions[extension].support)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.support" does not have a DOMString type value.', type: 'danger'});
+							}
+							else if (!['required', 'preferred'].includes(this.options.publicKey.extensions[extension].support)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.support" does not have a valid enum LargeBlobSupport value.', type: 'danger'});
+							}
+						}
+						// Only valid during authentication
+						if (this.options.publicKey.extensions[extension].hasOwnProperty('read')) {
+							if (!isDOMString(this.options.publicKey.extensions[extension].read)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.read" does not have a boolean type value.', type: 'danger'});
+							}
+							observations.push({message: '"publicKey.extensions.largeBlob.read" is only valid during authentication.', type: 'danger'});
+						}
+						// Only valid during authentication
+						if (this.options.publicKey.extensions[extension].hasOwnProperty('write')) {
+							if (!isBufferSource(this.options.publicKey.extensions[extension].write)) {
+								observations.push({message: '"publicKey.extensions.largeBlob.write" does not have a BufferSource type value.', type: 'danger'});
+							}
+							observations.push({message: '"publicKey.extensions.largeBlob.write" is only valid during authentication.', type: 'danger'});
+						}
+						// Check for unknown keys
+						for (let key in this.options.publicKey.extensions[extension]) {
+							if (this.options.publicKey.extensions[extension].hasOwnProperty(key) && !['support', 'read', 'write'].includes(key)) {
+								observations.push({message: 'unknown attribute "publicKey.extensions.largeBlob.' + key + '"', type: 'warning'});
+							}
+						}
 					}
 
 					else {
