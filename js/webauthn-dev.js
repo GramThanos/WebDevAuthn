@@ -5,7 +5,7 @@
  * GramThanos
  */
 
-window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
+window.WebDevAuthn = window.WebDevAuthn || ((cWindow, credentials, PKCredential) => {
 	let WebDevAuthn = {
 
 		// Dev tools URL
@@ -91,7 +91,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 			}
 
 			// Listen for messages from other pages
-			window.addEventListener('message', (event) => {
+			cWindow.addEventListener('message', (event) => {
 				if (event.origin !== new URL(this.devDomain).origin)
 					return;
 				if (!event.data.hasOwnProperty('id')) {
@@ -139,7 +139,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 
 		connect : function(instance, send=true) {
 			let openWin = () => {
-				return window.open(
+				return cWindow.open(
 					this.devDomain + (
 						instance.authn == 'create' ?
 							this.devCreatePath :
@@ -174,7 +174,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 						instance.authn == 'create' ?
 							this.devCreatePath :
 							this.devGetPath
-					) + '?data=' + encodeURIComponent(window.btoa(JSON.stringify({
+					) + '?data=' + encodeURIComponent(cWindow.btoa(JSON.stringify({
 						id: instance.id,
 						type: instance.type,
 						url: instance.url,
@@ -240,7 +240,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 						status : 'unassigned',
 						type: 'physical',
 						authn: 'create',
-						url : window.location.href,
+						url : cWindow.location.href,
 						id : ++this.idIncrement,
 						resolve : resolve,
 						reject : reject,
@@ -250,7 +250,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 					};
 					this.instances.push(instance);
 					//this.connect(instance, false);
-					//window.focus();
+					//cWindow.focus();
 					this.WebAuthn.create.apply(this.WebAuthn.scope, arguments).then((credential) => {
 						if (this._debugger) debugger;
 						//instance.credential = {
@@ -279,7 +279,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 						status : 'unassigned',
 						type: 'virtual',
 						authn: 'create',
-						url : window.location.href,
+						url : cWindow.location.href,
 						id : ++this.idIncrement,
 						resolve : resolve,
 						reject : reject,
@@ -303,7 +303,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 						status : 'unassigned',
 						type: 'physical',
 						authn: 'get',
-						url : window.location.href,
+						url : cWindow.location.href,
 						id : ++this.idIncrement,
 						resolve : resolve,
 						reject : reject,
@@ -313,7 +313,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 					};
 					this.instances.push(instance);
 					//this.connect(instance, false);
-					//window.focus();
+					//cWindow.focus();
 					this.WebAuthn.get.apply(this.WebAuthn.scope, arguments).then((credential) => {
 						if (this._debugger) debugger;
 						//instance.credential = {
@@ -344,7 +344,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 						status : 'unassigned',
 						type: 'virtual',
 						authn: 'get',
-						url : window.location.href,
+						url : cWindow.location.href,
 						id : ++this.idIncrement,
 						resolve : resolve,
 						reject : reject,
@@ -450,7 +450,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 					if (value.hasOwnProperty('flag') && value.flag === 'FLAG_TYPED_ARRAY') {
 						if (value.constructor === 'ArrayBuffer')
 							return new Uint8Array(value.data).buffer;
-						return new window[value.constructor](value.data);
+						return new cWindow[value.constructor](value.data);
 					}
 				} catch(e) {}
 				return value;
@@ -493,7 +493,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 
 				// Patch object ancestors to be instance of AuthenticatorAssertionResponse
 				if (obj.patch !== false)
-					this['__proto__']['__proto__'] = window.AuthenticatorAssertionResponse.prototype;
+					this['__proto__']['__proto__'] = cWindow.AuthenticatorAssertionResponse.prototype;
 			}
 
 			// Expose that this is virtual
@@ -519,7 +519,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 
 				// Patch object ancestors to be instance of AuthenticatorAttestationResponse
 				if (obj.patch !== false)
-					this['__proto__']['__proto__'] = window.AuthenticatorAttestationResponse.prototype;
+					this['__proto__']['__proto__'] = cWindow.AuthenticatorAttestationResponse.prototype;
 			}
 
 			getAuthenticatorData () {
@@ -576,7 +576,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 
 				// Patch object ancestors to be instance of PublicKeyCredential
 				if (obj.patch !== false)
-					this['__proto__']['__proto__'] = window.PublicKeyCredential.prototype;
+					this['__proto__']['__proto__'] = cWindow.PublicKeyCredential.prototype;
 			}
 
 			// Extensions not yet implemented
@@ -671,7 +671,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 	};
 	// Handle Popups with fallback to fake popup
 	let Popup = function(text, type='alert', defaultText, force = false) {
-		let popup = type == 'confirm' ? window.confirm : type == 'prompt' ? window.prompt : window.alert;
+		let popup = type == 'confirm' ? cWindow.confirm : type == 'prompt' ? cWindow.prompt : cWindow.alert;
 		return new Promise((resolve, reject) => {
 			try {
 				let t = new Date();
@@ -686,9 +686,14 @@ window.WebDevAuthn = window.WebDevAuthn || ((credentials, PKCredential) => {
 		});
 	};
 
-	WebDevAuthn.init();
+	if (!credentials || !PKCredential) {
+		console.log('WebDevAuthn: WebAuthn is not availiable in this context.');
+	}
+	else {
+		WebDevAuthn.init();
+	}
 	return WebDevAuthn;
-})(window.navigator.credentials, window.PublicKeyCredential);
+})(window, window.navigator.credentials, window.PublicKeyCredential);
 
 //window.WebDevAuthn.virtual(true);
 //window.WebDevAuthn.development(true);
