@@ -2,7 +2,7 @@
 	"name": "WebDevAuthn",
 	"description": "Debug FIDO2 requests and responses",
 	"author": "Athanasios Vasileios Grammatopoulos",
-	"version": "0.2",
+	"version": "0.3",
 
 	"icons": {
 		"19": "icons/icon.png",
@@ -26,7 +26,6 @@
 	},
 	"permissions": [
 		"storage",
-		"unlimitedStorage",
 		"<all_urls>"
 	],
 
