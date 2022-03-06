@@ -22,6 +22,14 @@
 			float: left;
 			margin: 0px;
 		}
+		.title a, .footer a {
+			color: black;
+			text-decoration: none;
+		}
+		.title a:hover, .footer a:hover {
+			background: black;
+			color: white;
+		}
 		.option {
 			/*line-height: 34px;*/
 			margin: 10px;
@@ -31,6 +39,9 @@
 		}
 		.options {
 			/*padding-left: 45px;*/
+		}
+		.options hr {
+			margin: 0px 10px;
 		}
 
 		.footer {
@@ -131,55 +142,59 @@
 			<small>Enable or Disable WebDevAutn.</small>
 		</div>
 
-		<div class="option">
-			<label class="switch">
-				<input type="checkbox" id="option@virtual">
-				<span class="slider round"></span>
-			</label>
-			<span>Virtual Authnticator</span><br>
-			<small>Use virtual authenticator for WebAuthn.</small>
-		</div>
+		<hr/>
 
-		<div class="option">
-			<label class="switch">
-				<input type="checkbox" id="option@pause-with-alert">
-				<span class="slider round"></span>
-			</label>
-			<span>Pause with Alert</span><br>
-			<small>Throw alert before completing the action.</small>
-		</div>
+		<div id="sub-options">
+			<div class="option">
+				<label class="switch">
+					<input type="checkbox" id="option@virtual">
+					<span class="slider round"></span>
+				</label>
+				<span>Virtual Authnticator</span><br>
+				<small>Use virtual authenticator for WebAuthn.</small>
+			</div>
 
-		<div class="option">
-			<label class="switch">
-				<input type="checkbox" id="option@platform-authenticator-available">
-				<span class="slider round"></span>
-			</label>
-			<span>Set Platform Authenticator Available</span><br>
-			<small>Set PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable to return true.</small>
-		</div>
+			<div class="option">
+				<label class="switch">
+					<input type="checkbox" id="option@pause-with-alert">
+					<span class="slider round"></span>
+				</label>
+				<span>Pause with Alert</span><br>
+				<small>Throw alert before completing the action.</small>
+			</div>
 
-		<div class="option">
-			<label class="switch">
-				<input type="checkbox" id="option@instance-of-pub-key">
-				<span class="slider round"></span>
-			</label>
-			<span>Instance of PublicKey</span><br>
-			<small>Return an emulation of a PublicKey object.</small>
-		</div>
+			<div class="option">
+				<label class="switch">
+					<input type="checkbox" id="option@platform-authenticator-available">
+					<span class="slider round"></span>
+				</label>
+				<span>Set Platform Authenticator Available</span><br>
+				<small>Set PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable to return true.</small>
+			</div>
 
-		<div class="option">
-			<label class="switch">
-				<input type="checkbox" id="option@debugger">
-				<span class="slider round"></span>
-			</label>
-			<span>DevTools Debugger</span><br>
-			<small>Invoke DevTools debugger on invocation and on return of calls.</small>
+			<div class="option">
+				<label class="switch">
+					<input type="checkbox" id="option@instance-of-pub-key">
+					<span class="slider round"></span>
+				</label>
+				<span>Instance of PublicKey</span><br>
+				<small>Return an emulation of a PublicKey object.</small>
+			</div>
+
+			<div class="option">
+				<label class="switch">
+					<input type="checkbox" id="option@debugger">
+					<span class="slider round"></span>
+				</label>
+				<span>DevTools Debugger</span><br>
+				<small>Invoke DevTools debugger on invocation and on return of calls.</small>
+			</div>
 		</div>
 	</div>
 
 	<div class="footer">
-		<div>Copyright © 2021, <a href="https://github.com/GramThanos">Athanasios Vasileios Grammatopoulos</a></div>
-		<div>In collaboration with <a href="https://www.unipi.gr/">University of Piraeus</a></div>
+		<div>Copyright © 202, <a href="https://github.com/GramThanos" target="_blank">Athanasios Vasileios Grammatopoulos</a></div>
+		<div>In collaboration with <a href="https://www.unipi.gr/" target="_blank">University of Piraeus</a></div>
 	</div>
 
 	<script src="popup.js"></script>
