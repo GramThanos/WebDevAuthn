@@ -12,13 +12,19 @@ WebDevAuthn is a web tool to test & analyze FIDO2/WebAuthn requests and response
 
 Furthermore, developers may use this tool's injector (in the form of embedded code or an extension) to hijack WebAuthn calls and analyse them. The tool also features an advance virtual authenticator, able to emulate WebAuthn responces.
 
-The tool allows developers to:
- - experiment through a WebAuthn playground;
- - validate the information passed to the authentication by the FIDO2/WebAuthn server as parameters;
- - decode and analyse the authenticator’s WebAuthn response;
- - use the embedded virtual FIDO2 authenticator;
- - test webauthn implementations;
- - assess the security of a WebAuthn implementation;
+Analyser Features:
+- Capture WebAuthn requests
+- Analyse WebAuthn options (show info, warnings & errors)
+- Unpack/Decode WebAuthn authenticator responses
+- Virtual Authenticator Device (for custom responses)
+
+Virtual Authenticator Device:
+- OS independent
+- Supports packed attestation
+- Supports wrapped keys to credentials id
+- Access to the private key of the generated credentials
+- Testing mode to assess implementations
+- Multiple supported algorithms
 
 ___
 
