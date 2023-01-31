@@ -2,7 +2,8 @@
 	"name": "WebDevAuthn",
 	"description": "Debug FIDO2 requests and responses",
 	"author": "Athanasios Vasileios Grammatopoulos",
-	"version": "0.5",
+	"version": "0.6",
+	"homepage_url": "https://gramthanos.github.io/WebDevAuthn/",
 
 	"icons": {
 		"19": "icons/icon.png",
@@ -30,8 +31,12 @@
 	],
 	"web_accessible_resources": [{
 		"resources" : ["webauthn-dev.js"],
-		"matches": ["https://*/*"],
-		"extension_ids": []
+		"matches": ["https://*/*"]
 	}],
-	"manifest_version": 3
+	"manifest_version": 3,
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "webdevauthn@gramthanos.github.io"
+		}
+	}
 }
