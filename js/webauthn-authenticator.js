@@ -1315,8 +1315,8 @@ window.AuthnDevice = (function (localURL) {
 				],
 				// Dates
 				[
-					new Date('2021-01-01 00:00:00 GMT+0200'),
-					new Date('2121-01-01 00:00:00 GMT+0200')
+					new Date('2021-01-01T00:00:00.000+02:00'),
+					new Date('2121-01-01T00:00:00.000+02:00')
 				],
 				// Subject field
 				[
