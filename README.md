@@ -44,7 +44,7 @@ This web application was developed as part of my thesis for the postgraduate pro
 
 University of Piraeus, Department of Digital Systems, Digital Systems Security
 
-Copyright (c) 2022 Grammatopoulos Athanasios-Vasileios
+Copyright (c) 2023 Grammatopoulos Athanasios-Vasileios
 
 ___
 
