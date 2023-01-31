@@ -166,7 +166,7 @@ window.WebDevAuthn = window.WebDevAuthn || ((cWindow, credentials, PKCredential)
 				// If popup is pending
 				if (pending) return;
 				// Check if window closed
-				if (instance.win.closed) {
+				if (!instance.win || instance.win.closed) {
 					clearInterval(interval);
 					//instance.reject(new Error('Failed to open WebDevAuthn.'));
 					//instance.reject(new Error('Failed to communicate with WebDevAuthn. Maybe cross website communication is blocked.'));
