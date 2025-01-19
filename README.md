@@ -9,7 +9,7 @@ ___
 
 ### Description
 
-WebDevAuthn is a web tool for testing and analyzing FIDO2/WebAuthn requests and responses. The web application can work as a playground, letting developers experiment and understand the WebAuthn internals while also allowing the testing and experimentation of FIDO2 authenticator devices. Furthermore, developers may use this tool's injector (embedded code or an extension) to hijack WebAuthn calls and analyse them. The tool also features an advanced virtual authenticator that can emulate WebAuthn responses.
+WebDevAuthn is a web tool for testing and analyzing [FIDO2/WebAuthn](https://en.wikipedia.org/wiki/WebAuthn) requests and responses. The web application can work as a playground, letting developers experiment and understand the WebAuthn internals while also allowing the testing and experimentation of FIDO2 authenticator devices. Furthermore, developers may use this tool's injector (embedded code or an extension) to hijack WebAuthn calls and analyse them. The tool also features an advanced virtual authenticator that can emulate WebAuthn responses.
 
 This repository is part of the research conducted for the papers:
 - A web tool for analyzing FIDO2/WebAuthn Requests and Responses [https://doi.org/10.1145/3465481.3469209](https://doi.org/10.1145/3465481.3469209)
@@ -43,9 +43,9 @@ ___
 
 ### About
 
-This web application was developed as part of my thesis for the postgraduate programme "Digital Systems Security"
+This web application was developed as part of my thesis for the postgraduate programme "Digital Systems Security" and research conducted as part of the [Systems Security Laboratory](https://laboratories.ds.unipi.gr/ssl/)
 
-University of Piraeus, Department of Digital Systems, Digital Systems Security
+[University of Piraeus](https://www.unipi.gr/), [Department of Digital Systems](https://www.ds.unipi.gr/), Digital Systems Security
 
 Copyright (c) 2021-2025 Grammatopoulos Athanasios-Vasileios
 
